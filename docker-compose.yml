@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  mospoly-helper-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mospoly-helper-bot
+    restart: unless-stopped
+
+    environment:
+      # Токен бота из .env файла
+      - BOT_TOKEN=${BOT_TOKEN}
+
+    volumes:
+      # Монтируем папку с видео (исходники)
+      - ./src/videos:/app/src/videos:ro
+      # Монтируем папку с кешем (для сгенерированных видео)
+      - ./src/data/cache:/app/src/data/cache
+      # Монтируем папку с данными пользователей
+      - ./src/data/users:/app/src/data/users
+      # Монтируем папку с логами
+      - ./logs:/app/logs
+
+    # Настройки логирования Docker
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # Проверка здоровья контейнера
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f 'python bot.py' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

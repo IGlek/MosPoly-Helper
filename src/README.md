@@ -5,7 +5,6 @@
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
 [![Aiogram](https://img.shields.io/badge/Aiogram-3.0.0-green.svg)](https://aiogram.dev/)
 [![MoviePy](https://img.shields.io/badge/MoviePy-1.0.3-red.svg)](https://moviepy.readthedocs.io/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)](https://www.docker.com/)
 [![Bot](https://img.shields.io/badge/Telegram-@MosPoly__Helperbot-blue.svg)](https://t.me/MosPoly_Helperbot)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -38,23 +37,6 @@
 > 📝 **Важно**: Указывайте номер кабинета точно в том формате, как он указан в личном кабинете или расписании
 
 ## 🚀 Быстрый старт
-
-### 🐳 Запуск через Docker (рекомендуется)
-
-```bash
-# 1. Клонирование репозитория
-git clone https://github.com/EDeev/mospoly-helper.git
-cd mospoly-helper
-
-# 2. Настройка токена
-cp .env.example .env
-# Отредактируйте .env и добавьте ваш BOT_TOKEN
-
-# 3. Запуск
-docker-compose up -d
-```
-
-📖 **Подробнее**: [QUICKSTART.md](QUICKSTART.md) | [DOCKER.md](DOCKER.md)
 
 ### Команды бота
 
@@ -123,15 +105,28 @@ src/code/
 │       ├── 📂 mi/            # Михалковская
 │       ├── 📂 pk/            # Павла Корчагина
 │       └── 📂 pr/            # Прянишникова
-└── 📂 logs/                  # Журналы работы (рекомендуется)
+├── 📂 logs/                  # Журналы работы (рекомендуется)
+├── 📄 Dockerfile             # Конфигурация Docker-образа
+├── 📄 docker-compose.yml     # Оркестрация контейнеров
+├── 📄 .env                   # Переменные окружения (создать из .env.example)
+└── 📄 .env.example           # Шаблон переменных окружения
 ```
 
 ## ⚡ Установка и настройка
 
 ### 📋 Системные требования
 
+**Для запуска через Docker (рекомендуется):**
+- **OS**: Linux (Ubuntu 20.04+), macOS, Windows 10+
+- **Docker**: 20.10+ и Docker Compose
+- **RAM**: минимум 2 ГБ (рекомендуется 4 ГБ)
+- **Storage**: минимум 10 ГБ для видеофрагментов и кеша
+- **Network**: стабильное интернет-соединение
+
+**Для запуска без Docker:**
 - **OS**: Linux (Ubuntu 20.04+), macOS, Windows 10+
 - **Python**: 3.10 или выше
+- **FFmpeg**: последняя версия
 - **RAM**: минимум 2 ГБ (рекомендуется 4 ГБ)
 - **Storage**: минимум 10 ГБ для видеофрагментов и кеша
 - **Network**: стабильное интернет-соединение
@@ -184,6 +179,46 @@ mkdir -p logs
 ```
 
 ### 🚀 Запуск
+
+#### 🐳 Запуск через Docker (рекомендуется)
+
+**1. Подготовка:**
+```bash
+# Создайте файл .env из примера
+cp .env.example .env
+
+# Отредактируйте .env и добавьте ваш токен бота
+nano .env  # или любой другой редактор
+```
+
+**2. Запуск контейнера:**
+```bash
+# Сборка и запуск в фоновом режиме
+docker-compose up -d
+
+# Просмотр логов
+docker-compose logs -f
+
+# Остановка контейнера
+docker-compose down
+
+# Перезапуск после изменений
+docker-compose restart
+```
+
+**3. Предварительная генерация кеша (опционально):**
+```bash
+docker-compose exec mospoly-helper-bot python combine.py
+```
+
+**Преимущества Docker:**
+- ✅ Изолированная среда выполнения
+- ✅ Автоматическая установка FFmpeg и всех зависимостей
+- ✅ Простое развертывание на сервере
+- ✅ Автоматический перезапуск при сбоях
+- ✅ Управление логами
+
+#### 💻 Запуск без Docker (альтернатива)
 
 **Основной режим:**
 ```bash
